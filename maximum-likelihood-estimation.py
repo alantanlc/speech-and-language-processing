@@ -1,10 +1,12 @@
 # Maximum Likelihood Estimation Example
 
-# An intuitive way to estimate n-gram probabilities is called Maximum Likelihood Estimation or MLE. We get the MLE estimate for the parameters of an n-gram model by getting counts from a corpus, and normalizing the counts so that they lie between 0 and 1.
-
-# For example, to compute a particular bigram probability of a word y given previous word x, we'll compute the count of the bigram C(xy) and normalize by the sum of all the bigrams that share the same first word x. We can simplify this equation, since the sum of all bigram counts that start with a given word w[n-1] must be equal to the unigram count for that word w[n-1].
+# An intuitive way to estimate n-gram probabilities is called Maximum Likelihood Estimation or MLE. We get the MLE estimate for the parameters of an n-gram model by getting counts from a corpus, and normalizing the counts so that they lie between 0 and 1. For example, to compute a particular bigram probability of a word y given previous word x, we'll compute the count of the bigram C(xy) and normalize by the sum of all the bigrams that share the same first word x. We can simplify this equation, since the sum of all bigram counts that start with a given word w[n-1] must be equal to the unigram count for that word w[n-1].
 
 # Let's work through an example using a mini-corpus of three sentences. We'll first need to augment each sentence with a special symbol <s> at the beginning of the sentence, to give us the bigram context of the first word. We'll also need a special end-symbol. </s>
+
+# For probabilistic models, normalizing means dividing by some total count so that the resulting probabilities fall legally between 0 and 1.
+
+# We need the end-symbol to make the bigram grammar a true probability distribution. Without an end-symbol, the sentence probabilities for all sentences of a given length would sum to one. This model would define an infinite set of probability distributions, with one distribution per sentence length.
 
 from collections import Counter
 
@@ -17,10 +19,7 @@ unigram = flatten(sentences)
 unigram_count = Counter(unigram)
 # print(unigram_count)
 
-bigram = []
-for sentence in sentences:
-  for i in range(1, len(sentence)):
-    bigram.append((sentence[i-1], sentence[i]))
+bigram = [(sentence[i-1], sentence[i]) for sentence in sentences for i in range(1, len(sentence))]
 bigram_count = Counter(bigram)
 # print(bigram_count)
 
